@@ -1,0 +1,29 @@
+{
+  "name": "seenreq",
+  "version": "0.0.2",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "tests/test-gen.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mike442144/seenreq"
+  },
+  "keywords": [
+    "nodejs",
+    "url seen test",
+    "reomve duplicate url",
+    "crawler"
+  ],
+  "author": "Mike Chen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mike442144/seenreq/issues"
+  },
+  "homepage": "https://github.com/mike442144/seenreq",
+  "dependencies": {
+    "lodash": "^3.8.0",
+    "node-url-utils": "^0.4.0"
+  }
+}
