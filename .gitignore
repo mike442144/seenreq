@@ -1,3 +1,6 @@
+# Unix tmp file
+*.js~
+
 # Logs
 logs
 *.log
