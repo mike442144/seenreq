@@ -1,2 +1,2 @@
 # seenreq
-Generate a string for testing if a request is sent, request is Mikeal's request.
+A library to test if a url is crawled, usually used in a web crawler

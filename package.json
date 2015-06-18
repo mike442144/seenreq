@@ -1,10 +1,10 @@
 {
   "name": "seenreq",
-  "version": "0.0.2",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.4",
+  "description": "A library to test if a url is crawled, usually used in a web crawler",
+  "main": "./lib/seenreq.js",
   "scripts": {
-    "test": "tests/test-gen.js"
+    "test": "node tests/test.defaultnormalizer.js"
   },
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
     "nodejs",
     "url seen test",
     "reomve duplicate url",
-    "crawler"
+    "request normalize"
   ],
   "author": "Mike Chen",
   "license": "MIT",
