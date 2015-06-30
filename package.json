@@ -1,6 +1,6 @@
 {
   "name": "seenreq",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A library to test if a url is crawled, usually used in a web crawler",
   "main": "./lib/seenreq.js",
   "scripts": {
