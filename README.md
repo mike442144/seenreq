@@ -29,4 +29,30 @@ console.log(seen.exists(url));//false
 //return true if got same `request`
 console.log(seen.exists(opt));//true
 ```
+When you call `exists`, the module will do normalization itself first and then check if exists.
 
+# Use Redis to store keys
+`seenreq` default stores keys in memory, so process will use unlimited memory if there are unlimited keys. Redis will solve this problem.
+
+```javascript
+var seenreq = require('seenreq')
+var seen = new seenreq({
+    repo:'redis',// use redis instead of memory
+    host:'127.0.0.1',
+    port:6379
+});
+
+var url = "http://www.GOOGLE.com";
+
+//because of non-blocking I/O, you have to use a callback function to get result
+seen.exists(url,{
+    callback:function(err,result){
+	if(err){
+	    console.error(err);
+	}else{
+	    console.log(result);
+	}
+    }
+});
+
+```
