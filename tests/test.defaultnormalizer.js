@@ -73,3 +73,7 @@ var opt_body = {
 }
 
 assert.equal('POST https://github.com/logout\r\n{"authenticity_token":"R1d7nfjekS+a5/h8+L2DrSy02gt7GCxRLFla5JBjwMrYQRDRrGPaTFz/tHTQKaqYfMeZIYlYMhfBrnMwDDz+cg==","utf8":"✓"}',seen.normalize(opt_body));
+
+assert.equal("GET http://www.google.com/\r\n",seen.normalize("http:\/\/www.GOOGLE.com/"));
+//assert.equal("GET http://www.google.com/\r\n",seen.normalize("http://www.GOOGLE.com#abc=124"));
+
