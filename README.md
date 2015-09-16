@@ -48,14 +48,32 @@ var url = "http://www.GOOGLE.com";
 seen.exists(url,{
     callback:function(err,result){
         if(err){
-	    console.error(err);
+            console.error(err);
         }else{
-	    console.log(result);
+            console.log(result);
         }
     }
 });
 
 ```
+Class:Seenreq
+-------------
+
+Instance of Seenreq
+
+__seen.normalize(uri|option)__
+ * `uri` String, `option` is Option of `request` or `node-webcrawler`. return normalized String.
+
+__seen.exists(uri|option[,options])__
+ * [options](#options)
+
+__seen.dispose()__
+ * dispose resources of repo. If you do not call this the connection will keep forever, that is your process will never exit.
+
+Options
+-----------------
+ * removeKeys: Array, ignore specified keys when doing normalization. For instance, there is a `ts` property in the url like `http://www.xxx.com/index?ts=1442382602504` which is timestamp and it should be same whenever you visit.
+ * callback: Function, return result if using Redis repo.
 
 # RoadMap
  * add `mysql` repo to persist keys to disk.
