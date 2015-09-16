@@ -68,7 +68,7 @@ __seen.exists(uri|option[,options])__
  * [options](#options)
 
 __seen.dispose()__
- * dispose resources of repo. If you do not call this the connection will keep forever, that is your process will never exit.
+ * dispose resources of repo. If you are using Redis and do not call `dispose` the connection will keep forever, that is your process will never exit.
 
 Options
 -----------------
