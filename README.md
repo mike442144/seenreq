@@ -47,12 +47,16 @@ var url = "http://www.GOOGLE.com";
 //because of non-blocking I/O, you have to use a callback function to get result
 seen.exists(url,{
     callback:function(err,result){
-	if(err){
+        if(err){
 	    console.error(err);
-	}else{
+        }else{
 	    console.log(result);
-	}
+        }
     }
 });
 
 ```
+
+# RoadMap
+ * add `mysql` repo to persist keys to disk.
+ * add keys life time management.
