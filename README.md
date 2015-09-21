@@ -65,7 +65,7 @@ __seen.normalize(uri|option)__
  * `uri` String, `option` is Option of `request` or `node-webcrawler`. return normalized String.
 
 __seen.exists(uri|option|[uri][,options])__
- * [options](#options), Warning: if you call `exists` with an array of `uri` that have duplicate uris, the function won't remove.
+ * [options](#options), Warning: When using default `repo` if you call `exists` with an array of `uri` that have duplicate uris, the function won't remove.
 
 __seen.dispose()__
  * dispose resources of repo. If you are using Redis and do not call `dispose` the connection will keep forever, that is your process will never exit.
