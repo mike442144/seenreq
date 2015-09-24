@@ -63,14 +63,14 @@ seen.exists(opt,{callback:function(err,result){
     }});
 }});
 
-seen.exists(['http://www.twitter.com','http://www.google.com.hk','http://www.msn.com'],{callback:function(err,result){
+seen.exists(['http://www.twitter.com','http://www.google.com.hk','http://www.twitter.com'],{callback:function(err,result){
     if(err){
 	console.error(err);
     }else{
 	console.log(result);
 	assert.equal(false,result[0]);
 	assert.equal(false,result[1]);
-	assert.equal(false,result[2]);
+	assert.equal(true,result[2]);
     }
     setTimeout(seen.dispose.bind(seen),1000);
 }})
