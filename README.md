@@ -39,7 +39,8 @@ var seenreq = require('seenreq')
 var seen = new seenreq({
     repo:'redis',// use redis instead of memory
     host:'127.0.0.1',
-    port:6379
+    port:6379,
+    clearOnQuit:false // default true.
 });
 
 var url = "http://www.GOOGLE.com";
