@@ -1,6 +1,7 @@
 # seenreq
 A library to test if a url(request) is crawled, usually used in a web crawler. Compatible with `request` and `node-webcrawler`
 
+# Notice: Please do not use 0.1.6 or lower version on Node 4.0+
 
 # Install
 
