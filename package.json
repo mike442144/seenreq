@@ -1,6 +1,6 @@
 {
   "name": "seenreq",
-  "version": "0.1.8",
+  "version": "0.1.9",
     "description": "A library to test if a url(request) is crawled, usually used in a web crawler. Compatible with `request` and `node-webcrawler`",
   "main": "./lib/seenreq.js",
   "scripts": {
@@ -22,8 +22,10 @@
     "url": "https://github.com/mike442144/seenreq/issues"
   },
   "homepage": "https://github.com/mike442144/seenreq",
+    "optionalDependencies": {
+	"ioredis": "^1.8.0"
+    },
   "dependencies": {
-    "ioredis": "^1.8.0",
     "utils-merge": "^1.0.0",
     "node-url-utils": "^0.4.0"
   }
