@@ -77,3 +77,8 @@ assert.equal('POST https://github.com/logout\r\n{"authenticity_token":"R1d7nfjek
 assert.equal("GET http://www.google.com/\r\n",seen.normalize("http:\/\/www.GOOGLE.com/"));
 //assert.equal("GET http://www.google.com/\r\n",seen.normalize("http://www.GOOGLE.com#abc=124"));
 
+seen = new seenreq({ removeKeys: ["ts", "timestamp", "utm","uts","ut","spm","acm","scm","rn"]});
+assert.equal("GET https://shouji.tmall.com/\r\n",seen.normalize("https://shouji.tmall.com/?spm=875.7931836/B.category2016015.1.ypfT08&acm=lb-zebra-148799-667863.1003.8.708026&scm=1003.8.lb-zebra-148799-667863.ITEM_14561662186585_708026"));
+assert.equal("GET https://list.tmall.com/search_product.htm?from=.list.pc_1_searchbutton&type=p\r\n",seen.normalize("https://list.tmall.com/search_product.htm?spm=a222t.8063993.4308149192.7.9g9NCJ&acm=lb-zebra-164656-978568.1003.8.845089&from=.list.pc_1_searchbutton&type=p&scm=1003.8.lb-zebra-164656-978568.ITEM_14629998461062_845089"));
+assert.equal("GET https://list.tmall.com/search_shopitem.htm?cat=50024400&jumpto=3&sort=s&totalPage=4&user_id=2616970884\r\n",seen.normalize("https://list.tmall.com/search_shopitem.htm?cat=50024400&user_id=2616970884&totalPage=4&sort=s&jumpto=3"));
+assert.equal("GET https://detail.tmall.com/item.htm?areaId=110100&cat_id=50024400&id=536083939353&is_b=1&q=\r\n",seen.normalize("https://detail.tmall.com/item.htm?spm=a220m.1000862.1000725.6.D94Mbt&id=536083939353&areaId=110100&is_b=1&cat_id=50024400&q=&rn=63b2257700ef5e09a7e5d293391d3ef2"));
