@@ -75,7 +75,8 @@ __seen.dispose()__
 
 Options
 -----------------
- * removeKeys: Array, ignore specified keys when doing normalization. For instance, there is a `ts` property in the url like `http://www.xxx.com/index?ts=1442382602504` which is timestamp and it should be same whenever you visit.
+ * removeKeys: Array, Ignore specified keys when doing normalization. For instance, there is a `ts` property in the url like `http://www.xxx.com/index?ts=1442382602504` which is timestamp and it should be same whenever you visit.
+ * stripFragment: Boolean, Remove the fragment at the end of the URL (Default true).
  * callback: Function, return result if using Redis repo.
 
 # RoadMap
