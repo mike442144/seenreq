@@ -2,8 +2,6 @@
 # seenreq
 A library to test if a url(request) is crawled, usually used in a web crawler. Compatible with [request](https://github.com/request/request) and [node-crawler](https://github.com/bda-research/node-crawler)
 
-# Notice: Please do not use 0.1.6 or lower version on Node 4.0+
-
 # Install
 
     $ npm install seenreq
@@ -34,7 +32,7 @@ console.log(seen.exists(opt));//true
 When you call `exists`, the module will do normalization itself first and then check if exists.
 
 # Use Redis to store keys
-`seenreq` default stores keys in memory, so process will use unlimited memory if there are unlimited keys. Redis will solve this problem.
+`seenreq` default stores keys in memory, so process will use unlimited memory if there are unlimited keys. Redis will solve this problem. All `ioredis` options are recived and supported.
 
 ```javascript
 var seenreq = require('seenreq')
