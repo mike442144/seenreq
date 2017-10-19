@@ -32,6 +32,8 @@ var opt2 = {
 assert.equal(false, seen.exists(opt));
 assert.equal(false, seen.exists(opt2));
 
+seen = new seenreq({normalizer: 'toobject'});
+
 opt = {
     uri: "http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-2.html",
     seenreq_update: false

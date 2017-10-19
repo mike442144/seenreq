@@ -1,6 +1,7 @@
 var assert = require("assert")
 var seenreq = require("../lib/seenreq.js")
 var seen = new seenreq({
+    normalizer: 'toobject',
     repo: "redis",
     host: "192.168.98.116",
     port: 6379,

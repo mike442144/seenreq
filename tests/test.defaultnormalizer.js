@@ -1,6 +1,6 @@
 var assert = require("assert")
 var seenreq = require("../lib/seenreq.js")
-var seen = new seenreq();
+var seen = new seenreq({normalizer: 'toobject'});
 
 assert.equal("GET http://www.google.com/\r\n", seen.normalize("http://www.GOOGLE.com").sign);
 assert.equal(true, seen.normalize("http://www.GOOGLE.com").update);
@@ -88,6 +88,7 @@ assert.equal("GET http://www.google.com/\r\n", seen.normalize("http:\/\/www.GOOG
 //assert.equal("GET http://www.google.com/\r\n",seen.normalize("http://www.GOOGLE.com#abc=124"));
 
 seen = new seenreq({
+    normalizer: 'toobject',
     removeKeys: ["ts", "timestamp", "utm", "uts", "ut", "spm", "acm", "scm", "rn", "from", "type"]
 });
 assert.equal("GET https://shouji.tmall.com/\r\n", seen.normalize("https://shouji.tmall.com/?spm=875.7931836/B.category2016015.1.ypfT08&acm=lb-zebra-148799-667863.1003.8.708026&scm=1003.8.lb-zebra-148799-667863.ITEM_14561662186585_708026").sign);
