@@ -39,9 +39,9 @@ opt = {
     seenreq_update: false
 }
 
-opt2 = "http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-2.html"
+opt2 = "http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-2.html";
 
-opt3 = {
+var opt3 = {
     uri: "http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-2.html",
     seenreq_update: false
 }
