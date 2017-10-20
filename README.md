@@ -1,4 +1,7 @@
+[![NPM](https://nodei.co/npm/seenreq.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/seenreq/)
+
 [![build status](https://secure.travis-ci.org/mike442144/seenreq.png)](https://travis-ci.org/mike442144/seenreq)
+[![Dependency Status](https://david-dm.org/mike442144/seenreq/status.svg)](https://david-dm.org/mike442144/seenreq)
 # seenreq
 A library to test if a url/request is crawled, usually used in a web crawler. Compatible with [request](https://github.com/request/request) and [node-crawler](https://github.com/bda-research/node-crawler)
 
