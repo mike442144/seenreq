@@ -1,9 +1,18 @@
 var assert = require("assert")
-var seenreq = require("../lib/seenreq.js")
+var seenreq = require("../")
 var seen = new seenreq();
 
-assert.equal(false, seen.exists("http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-1.html"));
-assert.equal(true, seen.exists("http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-1.html"));
+seen.exists("http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-1.html", (e, rst) =>{
+    if(e) return console.error(e);
+
+    assert.equal(false,rst[0] );
+
+    seen.exists("http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-1.html", (e, rst) =>{
+	if(e) return console.error(e);
+
+	assert.equal(true,rst[0] );
+    })
+});
 
 var opt = {
     uri: "http://baoming.xdf.cn/ShoppingCart/Handlers/getCartVoucherHandler.ashx",
@@ -29,23 +38,36 @@ var opt2 = {
     jQuery: false
 }
 
-assert.equal(false, seen.exists(opt));
-assert.equal(false, seen.exists(opt2));
+seen.exists(opt, (e, rst) =>{
+    if(e) return console.error(e);
 
-seen = new seenreq({normalizer: 'toobject'});
+    assert.equal(false,rst[0] );
+});
+
+seen.exists(opt2, (e, rst) =>{
+    if(e) return console.error(e);
+
+    assert.equal(false,rst[0] );
+});
 
 opt = {
     uri: "http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-2.html",
-    seenreq_update: false
+    rupdate: false
 }
 
 opt2 = "http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-2.html";
 
 var opt3 = {
     uri: "http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-2.html",
-    seenreq_update: false
+    rupdate: false
 }
 
-assert.equal(false, seen.exists(opt));
-assert.equal(false, seen.exists(opt2));
-assert.equal(true, seen.exists(opt3));
+seen.exists(opt,(e, rst)=>{
+    assert.equal(false, rst[0]);
+    seen.exists(opt2, (e, rst)=>{
+	assert.equal(false, rst[0]);
+	seen.exists(opt3, (e, rst)=>{
+	    assert.equal(true, rst[0]);
+	});
+    });
+});
