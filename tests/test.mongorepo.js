@@ -1,9 +1,8 @@
 var assert = require("assert")
-var seenreq = require("../lib/seenreq.js")
+var seenreq = require("../")
 var seen = new seenreq({
-    normalizer: 'toobject',
     repo: "mongo",
-    host: "192.168.98.116",
+    url: "mongodb://192.168.98.116/seenreq",
     clearOnQuit: true,
 });
 
@@ -28,7 +27,7 @@ function step2(nextStep) {
 }
 
 function step3(nextStep) {
-    seen.exists({uri: 'http://www.url2.com/', seenreq_update: false}, function(err, result) {
+    seen.exists({uri: 'http://www.url2.com/', rupdate: false}, function(err, result) {
         if(err) {
             throw err;
         }
@@ -38,7 +37,7 @@ function step3(nextStep) {
 }
 
 function step4(nextStep) {
-    seen.exists({uri: 'http://www.url2.com/', seenreq_update: true}, function(err, result) {
+    seen.exists({uri: 'http://www.url2.com/', rupdate: true}, function(err, result) {
         if(err) {
             throw err;
         }
@@ -48,7 +47,7 @@ function step4(nextStep) {
 }
 
 function step5(nextStep) {
-    seen.exists({uri: 'http://www.url2.com/', seenreq_update: true}, function(err, result) {
+    seen.exists({uri: 'http://www.url2.com/', rupdate: true}, function(err, result) {
         if(err) {
             throw err;
         }
@@ -71,7 +70,10 @@ function step6(nextStep) {
     });
 }
 
-runInOrder([step1,step2,step3,step4,step5,step6]);
+seen.initialize().then(()=>{
+    runInOrder([step1,step2,step3,step4,step5,step6]);
+});
+
 
 function runInOrder(fnlist) {
     if (!Array.isArray(fnlist)) {
