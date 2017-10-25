@@ -2,6 +2,14 @@
 
 [![build status](https://secure.travis-ci.org/mike442144/seenreq.png)](https://travis-ci.org/mike442144/seenreq)
 [![Dependency Status](https://david-dm.org/mike442144/seenreq/status.svg)](https://david-dm.org/mike442144/seenreq)
+[![NPM download][download-image]][download-url]
+[![NPM quality][quality-image]][quality-url]
+
+[quality-image]: http://npm.packagequality.com/shield/seenreq.svg?style=flat-square
+[quality-url]: http://packagequality.com/#?package=seenreq
+[download-image]: https://img.shields.io/npm/dm/seenreq.svg?style=flat-square
+[download-url]: https://npmjs.org/package/seenreq
+
 # seenreq
 A library to test if a url/request is crawled, usually used in a web crawler. Compatible with [request](https://github.com/request/request) and [node-crawler](https://github.com/bda-research/node-crawler). The 1.0.0 or newer version has quite different APIs and is not compatible with previous versions. Please read the [upgrade guide](./UPGRADE.md) document.
 
