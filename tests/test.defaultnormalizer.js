@@ -7,10 +7,12 @@ assert.equal("GET http://www.google.com/\r\n",seen.normalize("http://www.GOOGLE.
 assert.equal("GET https://www.google.com.hk/?ei=qg5QVYyVBcrC8Afz6ICoDw&gfe_rd=cr&gws_rd=ssl&q=how%20to%20test%20url%20duplicate&safe=strict\r\n",seen.normalize("https://www.google.com.hk/?gfe_rd=cr&ei=qg5QVYyVBcrC8Afz6ICoDw&gws_rd=ssl&safe=strict&q=how+to+test+url+duplicate").sign);
 
 var opt = {
-    uri:"http://www.google.com"
+    uri:"http://www.google.com",
+    rupdate: false
 };
 
 assert.equal("GET http://www.google.com/\r\n",seen.normalize(opt).sign);
+assert.equal(false, seen.normalize(opt).options.rupdate);
 
 opt = {
     url:"http://www.GOOGLE.com"

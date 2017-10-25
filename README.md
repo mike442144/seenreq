@@ -30,20 +30,19 @@ console.log(seen.normalize(url));//{ sign: "GET http://www.google.com/\r\n", opt
 
 //request options to be normalized
 let option = {
-    uri:'http://www.GOOGLE.com'
+    uri: 'http://www.GOOGLE.com',
+    rupdate: false
 };
 
-console.log(seen.normalize(option));//{sign: "GET http://www.google.com/\r\n", options:{} }
+console.log(seen.normalize(option));//{sign: "GET http://www.google.com/\r\n", options:{rupdate: false} }
 
 seen.initialize().then(()=>{
-    //return false if ask for a `request` never see
     seen.exists(url,(e, rst)={
-        console.log(rst[0]);//false
+        console.log(rst[0]);//false if ask for a `request` never see
     });
     
-    //return true if got same `request`
     seen.exists(opt,(e, rst)=>{
-        console.log(rst[0]);//true
+        console.log(rst[0]);//true if got same `request`
     });
 }).catch(e){
     console.error(e);
