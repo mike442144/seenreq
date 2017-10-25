@@ -39,10 +39,9 @@ console.log(seen.normalize(option));//{sign: "GET http://www.google.com/\r\n", o
 seen.initialize().then(()=>{
     seen.exists(url,(e, rst)={
         console.log(rst[0]);//false if ask for a `request` never see
-    });
-    
-    seen.exists(opt,(e, rst)=>{
-        console.log(rst[0]);//true if got same `request`
+        seen.exists(opt,(e, rst)=>{
+            console.log(rst[0]);//true if got same `request`
+        });
     });
 }).catch(e){
     console.error(e);
@@ -66,6 +65,7 @@ let seen = new seenreq({
     port:6379,
     clearOnQuit:false // clear redis cache or don't when calling dispose(), default true.
 });
+
 seen.initialize().then(()=>{
     //do stuff...
 }).catch(e){
