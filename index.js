@@ -55,19 +55,11 @@ seenreq.prototype.initialize = function(callback){
     }
     
     return new Promise((resolve,reject)=>{
-	this.repo.initialize((e, arg1, arg2, arg3)=>{
+	this.repo.initialize((e, args)=>{
 	    if(e)
 		return reject(e);
 
-	    if(arg3){
-		resolve(arg1,arg2,arg3);
-	    }else if(arg2){
-		resolve(arg1, arg2);
-	    }else if(arg1){
-		resolve(arg1);
-	    }else{
-		resolve();
-	    }
+	    resolve(args);
 	});
     });
 }
