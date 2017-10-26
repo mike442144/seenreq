@@ -50,7 +50,7 @@ seen.initialize().then(()=>{
 When you call `exists`, the module will do normalization itself first and then check if exists.
 
 # Use Redis
-`seenreq` default stores keys in memory, so process will use unlimited memory if there are unlimited keys. Redis will solve this problem. Because seenreq uses `ioredis` as redis client, all `ioredis`' [options](https://github.com/luin/ioredis/blob/master/API.md) are recived and supported. You should first install:
+`seenreq` stores keys in memory by default, memory usage will soar as number of keys increases. Redis will solve this problem. Because seenreq uses `ioredis` as redis client, all `ioredis`' [options](https://github.com/luin/ioredis/blob/master/API.md) are recived and supported. You should first install:
 
 ```javascript
 npm install seenreq-repo-redis
@@ -96,7 +96,7 @@ Class:seenreq
 Instance of seenreq
 
 __seen.initialize(callback)__
- * callback, Function. return Promise if no callback
+ * `callback(error, argv)`, `error` and `argv` are callback arguments of `repo.initialize`. If `callback` is not passed, a `promise` will be returned, with `error` as argument when rejected, `argv` as argument when resolved.
  
 Initialize the repo
 
