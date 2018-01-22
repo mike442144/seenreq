@@ -16,7 +16,7 @@ A library to test if a url/request is crawled, usually used in a web crawler. Co
 
 # Install
 
-    $ npm install seenreq
+    $ npm install seenreq --save
 
 # Basic Usage
 
@@ -53,7 +53,7 @@ When you call `exists`, the module will do normalization itself first and then c
 `seenreq` stores keys in memory by default, memory usage will soar as number of keys increases. Redis will solve this problem. Because seenreq uses `ioredis` as redis client, all `ioredis`' [options](https://github.com/luin/ioredis/blob/master/API.md) are recived and supported. You should first install:
 
 ```javascript
-npm install seenreq-repo-redis
+npm install seenreq-repo-redis --save
 ```
 and then set repo to `redis`:
 
@@ -77,7 +77,7 @@ seen.initialize().then(()=>{
 It is similar with redis above:
 
 ```javascript
-npm install seenreq-repo-mongo
+npm install seenreq-repo-mongo --save
 ```
 
 ```javascript
