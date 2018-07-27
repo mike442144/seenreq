@@ -1,0 +1,52 @@
+{
+    "reqs": [{
+        "uri": "http://www.GOOGLE.com",
+        "qs":{
+            "q":"querysomething"
+        }
+    },
+    {
+        "uri":"http://www.GOOGLE.com#hashpart"
+    },
+    {
+        "method":"GET",
+        "uri":"http://www.google.com",
+        "qs":{
+            "q":"querysomething",
+            "gfe_rd":"cr",
+            "ei":"qg5QVYyVBcrC8Afz6ICoDw",
+            "gws_rd":"ssl",
+            "safe":"strict"
+        }
+    },
+    {
+        "method":"POST",
+        "uri":"https://github.com/logout",
+        "form":{
+            "utf8" :"✓",
+            "authenticity_token" :"R1d7nfjekS+a5/h8+L2DrSy02gt7GCxRLFla5JBjwMrYQRDRrGPaTFz/tHTQKaqYfMeZIYlYMhfBrnMwDDz+cg=="
+        }
+    },
+    {
+        "method":"POST",
+        "uri":"https://github.com/logout",
+        "form":"utf8=✓&authenticity_token=R1d7nfjekS+a5/h8+L2DrSy02gt7GCxRLFla5JBjwMrYQRDRrGPaTFz/tHTQKaqYfMeZIYlYMhfBrnMwDDz+cg=="
+
+    },
+    {
+        "method":"POST",
+        "uri":"https://github.com/logout",
+        "body":{
+            "utf8": "✓",
+            "authenticity_token": "R1d7nfjekS+a5/h8+L2DrSy02gt7GCxRLFla5JBjwMrYQRDRrGPaTFz/tHTQKaqYfMeZIYlYMhfBrnMwDDz+cg=="
+        },
+        "json": true
+    }
+    ],
+    "opts": [
+        {},
+        {"stripFragment": false},
+        {"stripFragment": true}
+    ]
+
+}
