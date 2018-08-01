@@ -1,3 +1,4 @@
+'use strict';
 const  seenreq = require('../');
 const expect = require('chai').expect;
 
