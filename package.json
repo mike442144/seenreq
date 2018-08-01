@@ -4,7 +4,9 @@
   "description": "A library to test if a url(request) is crawled, usually used in a web crawler. Compatible with `request` and `node-crawler`",
   "main": "index.js",
   "scripts": {
-    "test": "node tests/test.*.js"
+    "hint": "jshint ./lib/*/*.js ./test/*.js",
+    "test": "mocha --timeout=15000  ./test/*test.js",
+    "cover": "istanbul cover mocha --report lcovonly -- --timeout=15000 --reporter spec test/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,16 @@
   "homepage": "https://github.com/mike442144/seenreq",
   "dependencies": {
     "node-url-utils": "^0.4.0",
+    "seenreq-repo-mongo": "0.0.2",
+    "seenreq-repo-redis": "0.0.2",
     "utils-merge": "^1.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "istanbul": "^0.4.5",
+    "jshint": "^2.9.5",
+    "mocha": "^5.2.0",
+    "rewire": "^4.0.1",
+    "sinon": "^6.1.1"
   }
 }
