@@ -106,7 +106,6 @@ let seen = new seenreq({
 
 
 ## Class:seenreq
--------------
 
 Instance of seenreq
 
@@ -130,7 +129,7 @@ Returns a promise with an Boolean array, e.g. [true, false, true, false, false].
 Dispose resources of repo. If you are using repo other than memory, like Redis you should call `dispose` to release connection. Returns a promise.
 
 ## Options
------------------
+
  * removeKeys: Array, Ignore specified keys when doing normalization. For instance, there is a `ts` property in the url like `http://www.xxx.com/index?ts=1442382602504` which is timestamp and it should be same whenever you visit.
  * stripFragment: Boolean, Remove the fragment at the end of the URL (Default true).
  * rupdate: Boolean, it is short for `repo update`. Store in repo so that `seenreq` can hit the same `req` next time (Default true).
