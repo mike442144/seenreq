@@ -1,0 +1,41 @@
+{
+    "opts": [
+        "http://www.GOOGLE.com",
+        {
+            "uri": "http://www.GOOGLE.com",
+            "rupdate": false
+        },
+        {
+        "uri": "http://baoming.xdf.cn/ShoppingCart/Handlers/getCartVoucherHandler.ashx",
+        "method": "POST",
+        "form": {
+            "s": "a"
+        },
+        "headers": {
+            "Cookie": "Xdf.WebPay.V4.Cart="
+        },
+        "jQuery": false
+    },
+    {
+        "uri": "http://baoming.xdf.cn/ShoppingCart/Handlers/getCartVoucherHandler.ashx",
+        "method": "POST",
+        "form": {
+            "s": "b"
+        },
+        "headers": {
+            "Cookie": "Xdf.WebPay.V4.Cart="
+        },
+        "jQuery": false
+    },
+    {
+        "uri": "http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-2.html",
+        "rupdate": false
+    },
+        "http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-2.html",
+    {
+        "uri": "http://mall.autohome.com.cn/list/0-110100-0-0-0-0-0-0-0-2.html",
+        "rupdate": true
+    },
+    ["http://www.twitter.com", "http://www.google.com.hk", "http://www.twitter.com"]
+    ]
+}
