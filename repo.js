@@ -8,8 +8,8 @@ const crypto = require('crypto');
  *
  */
 class Repo{
-	initialize(callback){
-		process.nextTick(callback);
+	initialize(){
+		return Promise.resolve();
 	}
 
 	/*
@@ -21,16 +21,16 @@ class Repo{
      *
      * Priority of two options : normalizedReq.options > options
      */
-	exists(normalizedReq, options, callback){
+	exists(normalizedReq, options){
 		const req = normalizedReq;
 		const slots = {};
 		const uniq = [];
-		let keysToInsert = {};
-		let rst = new Array(req.length);
+		const keysToInsert = {};
+		const rst = new Array(req.length);
 
-		for (var i = 0; i < req.length; i++) {
-			let reqOptions = Object.assign({},options,req[i].options);
-			let key = this.transformKey(req[i].sign);
+		for (let i = 0; i < req.length; i++) {
+			const reqOptions = Object.assign({},options,req[i].options);
+			const key = this.transformKey(req[i].sign);
 			if (key in slots) {
 				rst[i] = true;
 			} else {
@@ -45,12 +45,10 @@ class Repo{
 			}
 		}
 		
-		this.getByKeys(uniq, (err, result) => {
-			if (err)
-				return callback(err);
+		return this.getByKeys(uniq).then( (result) => {
+			const ifTruthy = (key) => key==='1' || key===1 || key==='true' || key===true ;
 			
-			let ifTruthy = function(key){ return key==='1' || key===1 || key==='true' || key===true;};
-			for (var j = 0; j < uniq.length; j++) {
+			for (let j = 0; j < uniq.length; j++) {
 				if (ifTruthy(result[j])) {
 					rst[slots[uniq[j]]] = true;
 					delete keysToInsert[uniq[j]];
@@ -59,12 +57,9 @@ class Repo{
 				}
 			}
 
-			this.setByKeys(Object.keys(keysToInsert), (err) => {
-				if (err)
-					return callback(err);
-
-				callback(null, rst);
-			});
+			return this.setByKeys(Object.keys(keysToInsert));
+		}).then( () => {
+			return rst;
 		});
 	}
 
@@ -74,8 +69,8 @@ class Repo{
      *
      */
 	transformKey(key){
-		let hash = function(str) {
-			let hashFn = crypto.createHash('md5');
+		const hash = (str) => {
+			const hashFn = crypto.createHash('md5');
 			hashFn.update(str);
 			return hashFn.digest('hex');
 		};

@@ -1,61 +1,56 @@
 'use strict';
 const expect = require('chai').expect;
-const sinon = require('sinon');
 const DefaultMemRepo= require('../lib/repo/default.js');
 
 describe('default repo', () => {
-	let callback;
 	let memRepo;
 	beforeEach(()=>{
-		callback = sinon.spy();
 		memRepo = new DefaultMemRepo();
 	});
 
 	describe('constructor()', ()=>{
 		it('should create an object and  initialize cache property', ()=>{
-			expect(memRepo.cache).to.eql({});
+			expect(memRepo.cache).to.be.an.instanceof(Set);
 		});
 	});
 
 	describe('getByKeys()', () => {
-		it('should get cache value', () => {
-			memRepo.cache = {key1: 'key1', key2: 'key2', key3: 'key3'};
-			memRepo.getByKeys(['key1', 'key4'], callback);
-		});
-
-		after(()=> {
-			expect(callback.calledOnce).to.be.true;
-			expect(callback.calledWith(null, [true, false])).to.be.true;
-
+		it('should get cache value', (done) => {
+			memRepo.cache = new Set(['key1','key2','key3']);
+			memRepo.getByKeys(['key1', 'key4']).then( ([key1, key4]) => {
+				expect(key1).to.be.true;
+				expect(key4).to.be.false;
+				done();
+			});
 		});
 	});
 
 	describe('setByKeys()', ()=>{
-		it('should set cache value to null', ()=>{
-			memRepo.cache = {key1: 'key1', key2: 'key2', key3: 'key3'};
-			memRepo.setByKeys(['key2','key4'], callback);
-			expect(memRepo.cache).to.eql({key1: 'key1', key2: null, key3: 'key3', key4: null});
+		it('should set cache value to null', (done)=>{
+			memRepo.cache = new Set(['key1','key2','key3']);
+			memRepo.setByKeys(['key2','key4']).then( () => {
+				expect(memRepo.cache.has('key4')).to.be.true;
+				expect(memRepo.cache.has('key2')).to.be.true;
+				done();
+			});
 		});
-		
-		after(()=>{
-			expect(callback.calledOnce).to.be.true;
-		});
-		
 	});
 
 	describe('dispose()', ()=>{
-		it('should clear cache', ()=>{
-			memRepo.cache = {key1: 'key1', key2: 'key2', key3: 'key3'};
-			memRepo.getByKeys(['key0', 'key3'], callback);
-			memRepo.setByKeys(['key1','key2'], callback);
-			expect(memRepo.cache).to.eql({key1: null, key2: null, key3: 'key3'});
-			memRepo.dispose();
-			expect(memRepo.cache).to.be.a('null');
-		});
-		
-		after(()=>{
-			expect(callback.calledTwice).to.be.true;
-			expect(callback.calledWith(null, [false,true])).to.be.true;
+		it('should clear cache', (done)=>{
+			memRepo.cache = new Set(['key1','key2','key3']);
+			memRepo.getByKeys(['key0', 'key3']).then( ([key0, key3]) => {
+				expect(key0).to.be.false;
+				expect(key3).to.be.true;
+				return memRepo.setByKeys(['key1','key2']);
+			}).then( () => {
+				expect(memRepo.cache.has('key1')).to.be.true;
+				expect(memRepo.cache.has('key2')).to.be.true;
+				return memRepo.dispose();
+			}).then(() => {
+				expect(memRepo.cache).to.be.a('null');
+				done();
+			});
 		});
 	});
 });

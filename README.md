@@ -13,12 +13,27 @@
 # seenreq
 A library to test if a url/request is crawled, usually used in a web crawler. Compatible with [request](https://github.com/request/request) and [node-crawler](https://github.com/bda-research/node-crawler). The 1.x or newer version has quite different APIs and is not compatible with 0.x versions. Please read the [upgrade guide](./UPGRADE.md) document.
 
+# Table of Contents
 
-# Install
+* [Quick Start](#quick-start)
+  * [Installation](#installation)
+  * [Basic Usage](#basic-usage)
+  * [Use Redis](#use-redis)
+  * [Use Mongodb](#use-mongodb)
+* [Class:seenreq](#classseenreq)
+  * [seen.initialize()](#seeninitialize)
+  * [seen.normalize(uri|option[,options])](#seennormalizeurioptionoptions)
+  * [seen.exists(uri|option|array[,options])](#seenexistsurioptionarrayoptions)
+  * [seen.dispose()](#seen_dispose)
+* [Options](#options)
+
+## Quick Start
+
+### Installation
 
     $ npm install seenreq --save
 
-# Basic Usage
+### Basic Usage
 
 ```javascript
 const seenreq = require('seenreq')
@@ -37,19 +52,19 @@ let option = {
 console.log(seen.normalize(option));//{sign: "GET http://www.google.com/\r\n", options:{rupdate: false} }
 
 seen.initialize().then(()=>{
-    seen.exists(url,(e, rst)={
-        console.log(rst[0]);//false if ask for a `request` never see
-        seen.exists(opt,(e, rst)=>{
-            console.log(rst[0]);//true if got same `request`
-        });
-    });
+    return seen.exists(url);
+}).then( (rst) => {
+    console.log(rst[0]);//false if ask for a `request` never see
+    return seen.exists(opt);
+}).then( (rst) => {
+    console.log(rst[0]);//true if got same `request`
 }).catch(e){
     console.error(e);
 };
 ```
 When you call `exists`, the module will do normalization itself first and then check if exists.
 
-# Use Redis
+### Use Redis
 `seenreq` stores keys in memory by default, memory usage will soar as number of keys increases. Redis will solve this problem. Because seenreq uses `ioredis` as redis client, all `ioredis`' [options](https://github.com/luin/ioredis/blob/master/API.md) are recived and supported. You should first install:
 
 ```javascript
@@ -73,7 +88,7 @@ seen.initialize().then(()=>{
 }
 ```
 
-# Use mongodb
+### Use mongodb
 It is similar with redis above:
 
 ```javascript
@@ -90,33 +105,31 @@ let seen = new seenreq({
 ```
 
 
-Class:seenreq
+## Class:seenreq
 -------------
 
 Instance of seenreq
 
-__seen.initialize(callback)__
- * `callback(error, argv)`, `error` and `argv` are callback arguments of `repo.initialize`. If `callback` is not passed, a `promise` will be returned, with `error` as argument when rejected, `argv` as argument when resolved.
- 
-Initialize the repo
+### __seen.initialize()__
+Initialize the repo, returns a promise.
 
-__seen.normalize(uri|option[,options])__
- * `uri` String, `option` is Option of `request` or `node-webcrawler`
+### __seen.normalize(uri|option[,options])__
+ * `uri` String, `option` is Option of [request](https://github.com/request/request) or [node-crawler](https://github.com/bda-research/node-crawler)
  * [options](#options)
- * return normalized Object: {sign,options}
 
-__seen.exists(uri|option|array[,options],callback)__
+Returns normalized Object: {sign,options}.
+
+### __seen.exists(uri|option|array[,options])__
  * uri|option
  * [options](#options)
- * callback
-    - error: Error, An error instance representing the error during the execution
-	- rst: Array, An array representing if exists, e.g. [true, false, true, false, false]
 
-__seen.dispose()__
+Returns a promise with an Boolean array, e.g. [true, false, true, false, false].
 
-dispose resources of repo. If you are using repo other than memory, like Redis you should call `dispose` to release connection.
+### __seen.dispose()__
 
-Options
+Dispose resources of repo. If you are using repo other than memory, like Redis you should call `dispose` to release connection. Returns a promise.
+
+## Options
 -----------------
  * removeKeys: Array, Ignore specified keys when doing normalization. For instance, there is a `ts` property in the url like `http://www.xxx.com/index?ts=1442382602504` which is timestamp and it should be same whenever you visit.
  * stripFragment: Boolean, Remove the fragment at the end of the URL (Default true).

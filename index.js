@@ -3,19 +3,25 @@
 
 const URL = require('node-url-utils');
 
+/*
+ *
+ *
+ */
+
 function seenreq(options) {
 	let Repo = null;
-	let Normalizers = [];
+	const Normalizers = [];
     
 	options = options || {};
 	if(!options.repo || options.repo==='default' || options.repo==='memory'){
 		Repo = require('./lib/repo/default.js');
 	}else{
-		let moduleName = `seenreq-repo-${options.repo}`;
+		const moduleName = `seenreq-repo-${options.repo}`;
 		try{
 			Repo = require(moduleName);
 		}catch(e){
 			console.error(`Cannot load module ${moduleName}, please run 'npm install ${moduleName}' and retry`);
+			return;
 		}
 	}
     
@@ -49,19 +55,8 @@ function seenreq(options) {
  * - callback
  *  @return Promise if there is no callback
  */
-seenreq.prototype.initialize = function(callback){
-	if(callback){
-		return this.repo.initialize(callback);
-	}
-    
-	return new Promise((resolve,reject)=>{
-		this.repo.initialize((e, args)=>{
-			if(e)
-				return reject(e);
-
-			resolve(args);
-		});
-	});
+seenreq.prototype.initialize = function(){
+	return this.repo.initialize();
 };
 
 /* Generate method + full uri + body string.
@@ -74,7 +69,7 @@ seenreq.prototype.normalize = function(req, options) {
 		throw new Error('Argument req is required.');
 	}
     
-	let opt = {
+	const opt = {
 		method: 'GET',
 		body: null
 	};
@@ -89,43 +84,32 @@ seenreq.prototype.normalize = function(req, options) {
 	}
 
 	/* A normalizedRequest is an object of request with some modified keys and values */
-	let normalizedRequest = this.normalizers.reduce((r, cur) => cur.normalize(r,options), opt);
-	let  sign = [
+	const normalizedRequest = this.normalizers.reduce((r, cur) => cur.normalize(r,options), opt);
+	const  sign = [
 		[normalizedRequest.method, URL.normalize(normalizedRequest.uri, options)].join(' '), normalizedRequest.body
 	].join('\r\n');
     
-	let requestArgsMap = ['uri','url','qs','method','headers','body','form','json','multipart','encoding','localAddress'].reduce((pre,cur)=>{
-		pre[cur]=null;
-		return pre;
-	},{});
+	const requestArgsSet = new Set(['uri','url','qs','method','headers','body','form','json','multipart','followRedirect','followAllRedirects', 'maxRedirects','encoding','pool','timeout','proxy','auth','oauth','strictSSL','jar','aws','gzip','time','tunnel','proxyHeaderWhiteList','proxyHeaderExclusiveList','localAddress','forever']);
     
-	Object.keys(normalizedRequest).filter(key => !(key in requestArgsMap) ).forEach(key=>options[key]=normalizedRequest[key]);
+	Object.keys(normalizedRequest).filter(key => !requestArgsSet.has(key) ).forEach(key=>options[key]=normalizedRequest[key]);
 	return {sign,options};
 };
 
-seenreq.prototype.exists = function(req, options, callback) {
+seenreq.prototype.exists = function(req, options) {
 	if(!req){
 		throw new Error('Argument req is required.');
 	}
 
-	let cb = null;
 	if (!(req instanceof Array)) {
 		req = [req];
 	}
-
-	if(typeof callback === 'function'){
-		cb = callback;
-	}else if (typeof options === 'function') {
-		cb = options;
-		options = null;
-	}
-    
-	let rs = req.map(r=>this.normalize(r,options));
-	return this.repo.exists(rs, options, cb);
+	
+	const rs = req.map(r=>this.normalize(r,options));
+	return this.repo.exists(rs, options);
 };
 
 seenreq.prototype.dispose = function() {
-	this.repo.dispose();
+	return this.repo.dispose();
 };
 
 module.exports = seenreq;
