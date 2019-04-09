@@ -20,8 +20,8 @@ function seenreq(options) {
 		try{
 			Repo = require(moduleName);
 		}catch(e){
-			console.error(`Cannot load module ${moduleName}, please run 'npm install ${moduleName}' and retry`);
-			return;
+			console.error(`\nCannot load module ${moduleName}, please run 'npm install ${moduleName}' and retry\n`);
+			throw e;
 		}
 	}
     
