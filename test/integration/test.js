@@ -34,33 +34,36 @@ describe('seenreq integration testing', ()=>{
 				.then( ()=> seen.exists(ctx.opts[0]) )
 				.then( (rst)=>{
 					//false if ask for a `request` never see
-					expect(rst[0]).to.be.false;
+					expect(rst).to.be.false;
 					return seen.exists(ctx.opts[1]);
 				}).then( (rst)=>{
 					//true if got same `request`
-					expect(rst[0]).to.be.true;
+					expect(rst).to.be.true;
 					//true if ask for a duplicate `request`
 					return seen.exists(ctx.opts[0]);
 				}).then( (rst)=>{
-					expect(rst[0]).to.be.true;
+					expect(rst).to.be.true;
 					return seen.exists(ctx.opts[2]);
 				}).then( (rst)=>{
-					expect(rst[0]).to.be.false;
+					expect(rst).to.be.false;
 					return seen.exists(ctx.opts[3]);
 				}).then( (rst)=>{
-					expect(rst[0]).to.be.false;
+					expect(rst).to.be.false;
 					return seen.exists(ctx.opts[4]);
 				}).then( (rst)=>{
-					expect(rst[0]).to.be.false;
+					expect(rst).to.be.false;
 					return seen.exists(ctx.opts[6]);
 				}).then( (rst)=>{
-					expect(rst[0]).to.be.false;
+					expect(rst).to.be.false;
 					return seen.exists(ctx.opts[5]);
 				}).then( (rst)=>{
-					expect(rst[0]).to.be.true;
+					expect(rst).to.be.true;
 					return seen.exists(ctx.opts[4]);
+				}).then((rst) => {
+					expect(rst).to.be.true;
+					return seen.exists([ctx.opts[0], ctx.opts[3], ctx.opts[6], ctx.opts[4]]);
 				}).then((rst)=>{
-					expect(rst[0]).to.be.true;
+					expect(rst).to.eqls([true, true, true, true]);
 					done();
 				}).catch(function (e){
 					console.error(e);

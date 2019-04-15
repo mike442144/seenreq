@@ -105,7 +105,7 @@ seenreq.prototype.exists = function(req, options) {
 	}
 	
 	const rs = req.map(r=>this.normalize(r,options));
-	return this.repo.exists(rs, options);
+	return this.repo.exists(rs, options).then( rst => rst.length == 1 ? rst[0] : rst);
 };
 
 seenreq.prototype.dispose = function() {
