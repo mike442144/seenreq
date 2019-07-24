@@ -26,7 +26,12 @@ function seenreq(options) {
 	}
     
 	this.repo = new Repo(options);
-    
+	
+	//handle redis error
+	if(options.repo === 'redis') {
+		this.repo.redis.once('error', (err)=> {throw new Error(err)})
+	}
+	
 	if(!options.normalizer){
 		Normalizers.push(require('./lib/normalizer/default.js'));
 	}else{
