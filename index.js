@@ -9,24 +9,50 @@ const URL = require('node-url-utils');
  */
 
 function seenreq(options) {
-	let Repo = null;
-	const Normalizers = [];
-    
 	options = options || {};
-	if(!options.repo || options.repo==='default' || options.repo==='memory'){
-		Repo = require('./lib/repo/default.js');
-	}else{
-		const moduleName = `seenreq-repo-${options.repo}`;
-		try{
-			Repo = require(moduleName);
-		}catch(e){
-			console.error(`\nCannot load module ${moduleName}, please run 'npm install ${moduleName}' and retry\n`);
-			throw e;
+	
+	if(!options.type || options.type ==='default' || options.type==='bloomFilter'){
+
+		const BloomFilter = require('./lib/bloomFilter/default.js');
+
+		// default values
+		let maxKeys = 10000000;
+		let errorRate = 0.00001;
+
+		if(options.bloomFilter){
+			const tempMaxKeys = Number(options.bloomFilter.maxKeys);
+			const tempErrorRate =  Number(options.bloomFilter.errorRate);
+
+			if(tempMaxKeys <= 0 || tempErrorRate >= 1 || tempErrorRate <= 0){
+				throw new Error(`Wrong setting for the Bloom Filter!`);		
+			}
+			maxKeys = tempMaxKeys;
+			maxKey = tempErrorRate;
 		}
+
+		this.bloomFilter = new BloomFilter(maxKeys,errorRate);
+
+	}else if(options.type === 'key-value'){
+		let Repo = null;
+		
+		if(!options.repo || options.repo==='default' || options.repo==='memory'){
+			Repo = require('./lib/repo/default.js');
+		}else{
+			const moduleName = `seenreq-repo-${options.repo}`;
+			try{
+				Repo = require(moduleName);
+			}catch(e){
+				console.error(`\nCannot load module ${moduleName}, please run 'npm install ${moduleName}' and retry\n`);
+				throw e;
+			}
+		}
+		this.repo = new Repo(options);
+	}else{
+		throw new Error(`Cannot find type ${options.type}, please choose 'bloomFilter' or 'key-value'.`);
 	}
+	
     
-	this.repo = new Repo(options);
-    
+	const Normalizers = [];
 	if(!options.normalizer){
 		Normalizers.push(require('./lib/normalizer/default.js'));
 	}else{
@@ -56,7 +82,10 @@ function seenreq(options) {
  *  @return Promise if there is no callback
  */
 seenreq.prototype.initialize = function(){
-	return this.repo.initialize();
+	if(this.globalOptions.type === 'key-value')
+		return this.repo.initialize();
+
+	return this.bloomFilter.initialize();
 };
 
 /* Generate method + full uri + body string.
@@ -105,11 +134,27 @@ seenreq.prototype.exists = function(req, options) {
 	}
 	
 	const rs = req.map(r=>this.normalize(r,options));
-	return this.repo.exists(rs, options).then( rst => rst.length == 1 ? rst[0] : rst);
+	if(this.globalOptions.type === 'key-value')
+		return this.repo.exists(rs, options).then( rst => rst.length == 1 ? rst[0] : rst);
+
+	const result = [];
+	rs.forEach(item => {
+		if(this.bloomFilter.has(item)){
+			result.push(true);
+		}else{
+			result.push(false);
+			this.bloomFilter.add(item);
+		}
+	});
+
+	return result.length == 1 ? result[0] : result;
 };
 
 seenreq.prototype.dispose = function() {
-	return this.repo.dispose();
+	if(this.globalOptions.type === 'key-value')
+		return this.repo.dispose();
+	
+	return this.bloomFilter.dispose();
 };
 
 module.exports = seenreq;
