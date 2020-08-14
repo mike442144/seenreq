@@ -10,29 +10,7 @@ const URL = require('node-url-utils');
 
 function seenreq(options) {
 	options = options || {};
-	
-	if(!options.type || options.type ==='default' || options.type==='bloomFilter'){
-
-		const BloomFilter = require('./lib/bloomFilter/default.js');
-
-		// default values
-		let maxKeys = 10000000;
-		let errorRate = 0.00001;
-
-		if(options.bloomFilter){
-			const tempMaxKeys = Number(options.bloomFilter.maxKeys);
-			const tempErrorRate =  Number(options.bloomFilter.errorRate);
-
-			if(tempMaxKeys <= 0 || tempErrorRate >= 1 || tempErrorRate <= 0){
-				throw new Error(`Wrong setting for the Bloom Filter!`);		
-			}
-			maxKeys = tempMaxKeys;
-			maxKey = tempErrorRate;
-		}
-
-		this.bloomFilter = new BloomFilter(maxKeys,errorRate);
-
-	}else if(options.type === 'key-value'){
+	if(!options.type || options.type ==='default' || options.type === 'key-value'){
 		let Repo = null;
 		
 		if(!options.repo || options.repo==='default' || options.repo==='memory'){
@@ -47,6 +25,28 @@ function seenreq(options) {
 			}
 		}
 		this.repo = new Repo(options);
+	}
+	else if( options.type==='bloomFilter'){
+
+		const BloomFilter = require('./lib/bloomFilter/default.js');
+
+		// default values
+		let maxKeys = 100000000;
+		let errorRate = 0.000001;
+
+		if(options.bloomFilter){
+			const tempMaxKeys = Number(options.bloomFilter.maxKeys);
+			const tempErrorRate =  Number(options.bloomFilter.errorRate);
+
+			if(tempMaxKeys <= 0 || tempErrorRate >= 1 || tempErrorRate <= 0){
+				throw new Error(`Wrong setting for the Bloom Filter!`);		
+			}
+			maxKeys = tempMaxKeys;
+			maxKey = tempErrorRate;
+		}
+
+		this.bloomFilter = new BloomFilter(maxKeys,errorRate);
+
 	}else{
 		throw new Error(`Cannot find type ${options.type}, please choose 'bloomFilter' or 'key-value'.`);
 	}
@@ -82,10 +82,10 @@ function seenreq(options) {
  *  @return Promise if there is no callback
  */
 seenreq.prototype.initialize = function(){
-	if(this.globalOptions.type === 'key-value')
-		return this.repo.initialize();
+	if(this.globalOptions.type === 'bloomFilter')
+		return this.bloomFilter.initialize();
 
-	return this.bloomFilter.initialize();
+	return this.repo.initialize();
 };
 
 /* Generate method + full uri + body string.
@@ -134,27 +134,28 @@ seenreq.prototype.exists = function(req, options) {
 	}
 	
 	const rs = req.map(r=>this.normalize(r,options));
-	if(this.globalOptions.type === 'key-value')
-		return this.repo.exists(rs, options).then( rst => rst.length == 1 ? rst[0] : rst);
-
-	const result = [];
-	rs.forEach(item => {
-		if(this.bloomFilter.has(item)){
-			result.push(true);
-		}else{
-			result.push(false);
-			this.bloomFilter.add(item);
-		}
-	});
-
-	return result.length == 1 ? result[0] : result;
+	if(this.globalOptions.type === 'bloomFilter'){
+		const result = [];
+		rs.forEach(item => {
+			if(this.bloomFilter.has(item)){
+				result.push(true);
+			}else{
+				result.push(false);
+				this.bloomFilter.add(item);
+			}
+		});
+		
+		return result.length == 1 ? result[0] : result;
+	}
+	
+	return this.repo.exists(rs, options).then( rst => rst.length == 1 ? rst[0] : rst);
 };
 
 seenreq.prototype.dispose = function() {
-	if(this.globalOptions.type === 'key-value')
-		return this.repo.dispose();
+	if(this.globalOptions.type === 'bloomFilter')
+		return this.bloomFilter.dispose();
 	
-	return this.bloomFilter.dispose();
+	return this.repo.dispose();
 };
 
 module.exports = seenreq;
