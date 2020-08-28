@@ -1,11 +1,22 @@
 'use strict';
+const crypto = require('crypto');
 const expect = require('chai').expect;
 const TestBloomFilter = require('../lib/bloomFilter/default.js');
+
+function transformKey(key){
+	const hash = (str) => {
+		const hashFn = crypto.createHash('md5');
+		hashFn.update(str);
+		return hashFn.digest('hex');
+	};
+	
+	return hash(key);
+}
 
 describe('default bloom filter', () => {
 	let testBloomFilter;
 	beforeEach(()=>{
-		testBloomFilter = new TestBloomFilter(100,0.01);
+		testBloomFilter = new TestBloomFilter(100,0.001);
 	});
 
 	describe('constructor()', ()=>{
@@ -13,12 +24,13 @@ describe('default bloom filter', () => {
 			expect(testBloomFilter.bitMap).to.be.an.instanceof(Array);
 		});
 	});
+	
     describe('setBit()', ()=>{
         it('should set bit in the bit array', (done)=>{
 
             testBloomFilter.bitMap = [];
             testBloomFilter.setBit(127).then(() => {
-                expect(testBloomFilter.bitMap[127/31]).to.equal(1<<Math.floor(127 % 31));
+                expect(testBloomFilter.bitMap[Math.floor(127/31)]).to.equal(8);
                 done();
             })
         });
@@ -27,50 +39,35 @@ describe('default bloom filter', () => {
 	describe('getBit()', () => {
 		it('should get bit value from the bit array', (done) => {
             testBloomFilter.bitMap = [];
-            testBloomFilter.setBit(127);
-            testBloomFilter.getBit(127).then( res => expect(res).to.be.true);
-            testBloomFilter.getBit(126).then( res => expect(res).to.be.false);
+			testBloomFilter.setBit(127);
+			expect(testBloomFilter.getBit(127)).to.equal(8);
+			expect(testBloomFilter.getBit(126)).to.not.equal(8);
             done();
 
 		});
     });
     
     describe('has()', () => {
-		it('should get bit value from the bit array', (done) => {
-            testBloomFilter.bitMap = [];
-            testBloomFilter.setBit(127);
-            testBloomFilter.getBit(127).then( res => expect(res).to.be.true);
-            testBloomFilter.getBit(126).then( res => expect(res).to.be.false);
+		it('should check if a key is in bloom filter', (done) => {
+			testBloomFilter.bitMap = [];
+			const key = 'http://www.twitter.com';
+			testBloomFilter.add(key);
+			expect(testBloomFilter.has(key)).to.be.true;
+			expect(testBloomFilter.has('http://www.baidu.com')).to.be.false;
             done();
 
 		});
     });
     
-    describe('add()', () => {
-		it('should get bit value from the bit array', (done) => {
-            testBloomFilter.bitMap = [];
-            testBloomFilter.setBit(127);
-            testBloomFilter.getBit(127).then( res => expect(res).to.be.true);
-            testBloomFilter.getBit(126).then( res => expect(res).to.be.false);
-            done();
-
-		});
-	});
 	describe('dispose()', ()=>{
 		it('should clear cache', (done)=>{
-			memRepo.cache = new Set(['key1','key2','key3']);
-			memRepo.getByKeys(['key0', 'key3']).then( ([key0, key3]) => {
-				expect(key0).to.be.false;
-				expect(key3).to.be.true;
-				return memRepo.setByKeys(['key1','key2']);
-			}).then( () => {
-				expect(memRepo.cache.has('key1')).to.be.true;
-				expect(memRepo.cache.has('key2')).to.be.true;
-				return memRepo.dispose();
-			}).then(() => {
-				expect(memRepo.cache).to.be.a('null');
-				done();
-			});
+			testBloomFilter.bitMap = [];
+			const key = 'http://www.twitter.com';
+			testBloomFilter.add(key);
+			expect(testBloomFilter.has(key)).to.be.true;
+			testBloomFilter.dispose();
+			expect(testBloomFilter.bitMap).to.be.a('null');
+			done();
 		});
 	});
 });

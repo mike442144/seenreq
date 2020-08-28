@@ -118,7 +118,9 @@ seenreq.prototype.normalize = function(req, options) {
 		[normalizedRequest.method, URL.normalize(normalizedRequest.uri, options)].join(' '), normalizedRequest.body
 	].join('\r\n');
     
-	const requestArgsSet = new Set(['uri','url','qs','method','headers','body','form','json','multipart','followRedirect','followAllRedirects', 'maxRedirects','encoding','pool','timeout','proxy','auth','oauth','strictSSL','jar','aws','gzip','time','tunnel','proxyHeaderWhiteList','proxyHeaderExclusiveList','localAddress','forever']);
+	const requestArgsSet = this.globalOptions.type === 'bloomFilter' ? 
+		new Set(['method','body','uri','type']) :
+		new Set(['uri','url','qs','method','headers','body','form','json','multipart','followRedirect','followAllRedirects', 'maxRedirects','encoding','pool','timeout','proxy','auth','oauth','strictSSL','jar','aws','gzip','time','tunnel','proxyHeaderWhiteList','proxyHeaderExclusiveList','localAddress','forever']);
     
 	Object.keys(normalizedRequest).filter(key => !requestArgsSet.has(key) ).forEach(key=>options[key]=normalizedRequest[key]);
 	return {sign,options};
@@ -132,16 +134,23 @@ seenreq.prototype.exists = function(req, options) {
 	if (!(req instanceof Array)) {
 		req = [req];
 	}
-	
+
 	const rs = req.map(r=>this.normalize(r,options));
 	if(this.globalOptions.type === 'bloomFilter'){
 		const result = [];
 		rs.forEach(item => {
-			if(this.bloomFilter.has(item)){
+
+			const rupdate = item.options.rupdate;
+			delete item.options.rupdate;
+			
+			if(this.bloomFilter.has(JSON.stringify(item))){
 				result.push(true);
 			}else{
 				result.push(false);
-				this.bloomFilter.add(item);
+				if(rupdate !== false){
+					this.bloomFilter.add(JSON.stringify(item));
+				}
+
 			}
 		});
 		
