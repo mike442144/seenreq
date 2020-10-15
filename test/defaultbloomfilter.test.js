@@ -3,16 +3,6 @@ const crypto = require('crypto');
 const expect = require('chai').expect;
 const TestBloomFilter = require('../lib/bloomFilter/default.js');
 
-function transformKey(key){
-	const hash = (str) => {
-		const hashFn = crypto.createHash('md5');
-		hashFn.update(str);
-		return hashFn.digest('hex');
-	};
-	
-	return hash(key);
-}
-
 describe('default bloom filter', () => {
 	let testBloomFilter;
 	beforeEach(()=>{
